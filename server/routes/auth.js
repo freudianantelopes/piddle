@@ -107,4 +107,8 @@ router.post('/signup', authHandler.signupHandler);
  */
 router.put('/user/:id', authHandler.ensureAuthenticated, authHandler.updateUserHandler);
 
+
+// just ask if there's a logged in user or not.
+router.get('/loggedin', authHandler.ensureAuthenticated, authHandler.doNothing);
+
 module.exports = router;
