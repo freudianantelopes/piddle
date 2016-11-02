@@ -30,7 +30,7 @@ const TipField = (props) => {
       {isEditable &&
         <FormGroup>
           <InputGroup>
-            <InputGroup.Addon>Tip</InputGroup.Addon>
+            <InputGroup.Addon>Tip $</InputGroup.Addon>
             <FormControl
               type="number"
               name="tip"

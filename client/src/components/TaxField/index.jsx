@@ -20,7 +20,7 @@ const TaxField = (props) => {
       {isEditable &&
         <FormGroup>
           <InputGroup>
-            <InputGroup.Addon>Tax</InputGroup.Addon>
+            <InputGroup.Addon>Tax $</InputGroup.Addon>
             <FormControl
               type="number"
               name="tax"
