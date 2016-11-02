@@ -542,6 +542,8 @@ class Bill extends React.Component {
         sum + billItem.price
       ), 0);
       tip = total * (this.state.tip.percent / 100);
+      // round the result to two decimal places
+      tip = Math.round(tip * 100) / 100;
     }
     return tip;
   }
