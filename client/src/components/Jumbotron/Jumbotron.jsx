@@ -24,6 +24,10 @@ class JumbotronInstance extends Component {
     this.buttonTextMap[this.payABillButtonText] = '/pay';
     this.buttonTextMap[this.logInButtonText] = '/login';
     this.buttonTextMap[this.signUpButtonText] = '/signup';
+
+    this.setLoggedIn = this.setLoggedIn.bind(this);
+
+    window.setLoggedIn = this.setLoggedIn;
   }
 
   componentWillMount() {
@@ -40,6 +44,10 @@ class JumbotronInstance extends Component {
     }).catch(err => {
       console.error('failed calling loggedin, got error: ', err);
     })
+  }
+
+  setLoggedIn() {
+    this.setState({ loggedIn: false })
   }
 
   handleCallToAction(e) {
