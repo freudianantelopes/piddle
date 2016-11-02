@@ -29,6 +29,7 @@ class Bill extends React.Component {
     this.updateBill = this.updateBill.bind(this);
     this.claimBillItem = this.claimBillItem.bind(this);
     this.payForClaimedItems = this.payForClaimedItems.bind(this);
+    this.copyShortLink = this.copyShortLink.bind(this);
 
     // Bill Item
     this.changeBillItem = this.changeBillItem.bind(this);
@@ -77,6 +78,7 @@ class Bill extends React.Component {
         percent: null,
         usePercent: false,
       },
+      shortLink: null
     };
 
     if (!token) {
@@ -216,6 +218,7 @@ class Bill extends React.Component {
          * @todo this changes the URL but doesn't re-render the Bill in edit interactionMode
          */
         this.props.router.push(`/bill/${data.shortId}`);
+        this.setState({shortLink: data.shortId});
       })
       .catch((error) => {
         /**
@@ -433,6 +436,7 @@ class Bill extends React.Component {
          * @todo this changes the URL but doesn't re-render the Bill in edit interactionMode
          */
         this.props.router.push(`/bill/${data.shortId}`);
+        this.setState({shortLink: data.shortId});
       })
       .catch((error) => {
         /**
@@ -566,6 +570,21 @@ class Bill extends React.Component {
     this.updateTip();
   }
 
+  copyShortLink(e) {
+    // Copy bill short link to user clipboard
+    e.preventDefault();
+
+    this.refs.textarea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      const msg = successful ? 'successful' : 'unsuccessful';
+      console.log('Copying text command was ' + msg);
+    } catch (err) {
+      console.log('Oops, unable to copy');
+    }
+  }
+
   /**
    * Render the component
    * @method
@@ -638,6 +657,23 @@ class Bill extends React.Component {
               }
               {(this.state.interactionType === Symbol.for('new')) &&
                 <div className="text-center">
+                  <textarea 
+                    ref='textarea'
+                    className={this.state.shortLink ? 'show-shortlink' : 'hide-shortlink'}
+                    value={
+                      window.location.port.length > 0 ? 
+                      `${window.location.hostname}:${window.location.port}${window.location.pathname}` :
+                      `${window.location.hostname}${window.location.pathname}`
+                    }
+                  >
+                  </textarea>
+                  <a
+                    href='#'
+                    className={this.state.shortLink ? 'show-copy-link' : 'hide-copy-link'}
+                    onClick={this.copyShortLink}
+                  >
+                  Click here to copy your bill link!
+                  </a>
                   <Button
                     className="btn-primary"
                     id="create-new-bill-btn"
