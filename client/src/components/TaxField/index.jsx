@@ -27,7 +27,7 @@ const TaxField = (props) => {
               placeholder="Tax"
               value={props.taxValue}
               onChange={event => (
-                props.changeTaxValue(Number.parseFloat(event.target.value))
+                props.changeTaxValue(event.target.value)
               )}
             />
           </InputGroup>
