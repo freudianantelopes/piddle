@@ -11,29 +11,39 @@ class JumbotronInstance extends Component {
     this.state = {
       loggedIn: false
     }
+
+    // text for the buttons on the homepage
+    this.splitABillButtonText = 'Split a Bill';
+    this.payABillButtonText = 'Pay a Bill';
+    this.logInButtonText = 'Log in';
+    this.signUpButtonText = 'Sign up';
+
+    // what routes each button corresponds to
+    this.buttonTextMap = {};
+    this.buttonTextMap[this.splitABillButtonText] = '/bill';
+    this.buttonTextMap[this.payABillButtonText] = '/bill';
+    this.buttonTextMap[this.logInButtonText] = '/login';
+    this.buttonTextMap[this.signUpButtonText] = '/signup';
   }
 
   componentWillMount() {
     const token = localStorage.getItem('piddleToken');
-    console.log('token: ', token);
     fetch(`${this.serverUrl}/auth/loggedin`, {
       method: 'GET',
       headers: {
         Authorization: `JWT ${token}`,
       },
     }).then(response => {
-      console.log('successfully called loggedin, got response: ', response);
       this.setState({
         loggedIn: response.status === 200
       });
-      console.log(response.body);
     }).catch(err => {
-      console.log('failed calling loggedin, got error: ', err);
+      console.error('failed calling loggedin, got error: ', err);
     })
   }
 
-  handleCallToAction() {
-    this.props.router.push(this.state.loggedIn ? '/bill' : '/login');
+  handleCallToAction(e) {
+    this.props.router.push(this.buttonTextMap[e.target.textContent]);
   }
 
   render() {
@@ -44,10 +54,13 @@ class JumbotronInstance extends Component {
         <Row>
           <Col xs="12" sm={6}>
             <p><Button bsStyle="primary" bsSize="large" onClick={this.handleCallToAction}>
-              {this.state.loggedIn ? 'Split a Bill' : 'Log in'}
+              {this.state.loggedIn ? this.splitABillButtonText : this.logInButtonText}
             </Button></p>
           </Col>
-          <Col xsHidden sm={6}>
+          <Col xs='12' sm={6}>
+            <p><Button bsStyle='primary' bsSize='large' onClick={this.handleCallToAction}>
+              {this.state.loggedIn ? this.payABillButtonText : this.signUpButtonText}
+            </Button></p>
           </Col>
         </Row>
       </Jumbotron>

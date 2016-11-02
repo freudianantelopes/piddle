@@ -146,6 +146,9 @@ const updateUserHandler = (request, response) => {
     );
 };
 
+/** 
+ * Don't do anything, just end the response.
+ */
 const doNothing = (request, response) => {
   response.end();
 }
