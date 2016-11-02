@@ -1,0 +1,45 @@
+div.signupPage {
+	border: 1px solid black;
+	padding: 10px;
+	max-width: 450px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.Signup-intro {
+	text-align: center;
+	font-size: 1.1em;
+}
+
+.signupForm {
+	max-width: 30em;
+	margin: auto;
+}
+
+.signupContainer {
+	margin-bottom: 1em;
+}
+
+label.label {
+	display: inline-block;
+	width: 25%;
+	margin-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	font-size: 1em;
+	color: black;
+	text-align: left;
+}
+
+input {
+	display: inline-block;
+	width: 75%;
+}
+
+.signupButton {
+	text-align: center;
+}
+
+.haveAnAccount {
+	text-align: center;
+}

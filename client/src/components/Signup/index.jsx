@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router';
 import Request from '../../utils/requestHandler';
+import './Signup.css';
+
 
 class Signup extends Component {
   constructor(props) {
@@ -52,60 +54,80 @@ class Signup extends Component {
     return (
       <div className="signupPage">
         <p className="Signup-intro">
-          Welcome to the signup page
+          Create an Account
         </p>
         <form id="signupForm">
-          <label htmlFor="emailAddress">Email</label>
-          <input
-            type="text"
-            className="loginInput"
-            id="emailAddress"
-            name="emailAddress"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            className="loginInput"
-            id="password"
-            name="password"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            className="loginInput"
-            id="name"
-            name="name"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <label htmlFor="password">square Id</label>
-          <input
-            type="text"
-            className="loginInput"
-            id="squareId"
-            name="squareId"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <label htmlFor="password">paypal Id</label>
-          <input
-            type="text"
-            className="loginInput"
-            id="paypalId"
-            name="paypalId"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <input
-            type="submit"
-            className="submitSignup"
-            id="submitSignup"
-            value="Signup"
-            onClick={event => this.submitSignupForm(event)}
-          />
+            
+          <div className="signupContainer">
+            <label className="label" htmlFor="emailAddress">Email</label>
+            <input
+              type="text"
+              className="loginInput"
+              id="emailAddress"
+              name="emailAddress"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div>
+            
+          <div className="signupContainer">
+            <label className="label" htmlFor="password">Password</label>
+            <input
+              type="password"
+              className="loginInput"
+              id="password"
+              name="password"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div> 
+            
+          <div className="signupContainer">
+            <label className="label" htmlFor="name">Name</label>
+            <input
+              type="text"
+              className="loginInput"
+              id="name"
+              name="name"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div>
+            
+          <div className="signupContainer">
+            <label className="label" htmlFor="password">square Id</label>
+            <input
+              type="text"
+              className="loginInput"
+              id="squareId"
+              name="squareId"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div>
+            
+          <div className="signupContainer">
+            <label className="label" htmlFor="password">paypal Id</label>
+            <input
+              type="text"
+              className="loginInput"
+              id="paypalId"
+              name="paypalId"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div>
+            
+          <div className="signupButton">
+            <input
+              type="submit"
+              className="submitSignup"
+              id="submitSignup"
+              value="Signup"
+              onClick={event => this.submitSignupForm(event)}
+            />
+          </div>
         </form>
         <div className="signupError">{this.state.error}</div>
-        <span>Have an account? </span>
-        <Link to="/login">Log in</Link>
+        <div className="haveAnAccount">
+          <span>Have an account? </span>
+          <Link to="/login">Log in</Link>
+        </div>
       </div>
     );
   }
