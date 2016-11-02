@@ -8,6 +8,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
+import PayABill from './components/PayABill';
 // import Bootstrap from 'react-bootstrap';
 
 ReactDOM.render((
@@ -18,6 +19,7 @@ ReactDOM.render((
         <Route path="bill" component={Bill}>
           <Route path=":id" component={Bill} />
         </Route>
+        <Route path='pay' component={PayABill} />
         <Route path="login" component={Login} />
         <Route path="signup" component={Signup} />
         <Route path="profile" component={Profile} />
