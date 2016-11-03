@@ -105,7 +105,7 @@ router.post('/signup', authHandler.signupHandler);
  *   }
  * }
  */
-router.put('/user/:id', authHandler.updateUserHandler);
+router.put('/user/:id', authHandler.ensureAuthenticated, authHandler.updateUserHandler);
 
 
 /**
