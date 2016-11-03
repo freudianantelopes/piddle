@@ -51,11 +51,20 @@ class NavBar extends Component {
           </Nav>
           <Nav pullRight>
             <NavDropdown title="Account" id="basic-nav-dropdown">
-              <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
-              <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
-              <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Profile</MenuItem>
-              <MenuItem divider />
-              <MenuItem eventKey={6} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
+              {localStorage.getItem('piddleToken') 
+                ? 
+                <MenuItem>
+                  <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Profile</MenuItem>
+                  <MenuItem divider />
+                  <MenuItem eventKey={6} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
+                </MenuItem> 
+                :
+                <MenuItem>
+                  <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
+                  <MenuItem divider />
+                  <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
+                </MenuItem>
+              }
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
