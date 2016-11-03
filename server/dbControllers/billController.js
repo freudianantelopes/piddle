@@ -1,6 +1,7 @@
 const Bill = require('../db').models.Bill;
 const Item = require('../db').models.Item;
 const User = require('../db').models.User;
+const BillDebtors = require('../db').models.BillDebtors;
 const userController = require('./userController');
 const itemController = require('./itemController');
 
@@ -15,11 +16,12 @@ const itemController = require('./itemController');
  * @param {Object} bill - Properties of the bill.
  * @param {string} bill.payerEmailAddress - Email address of the bill payer.
  * @param {string} [bill.description] - Description of the bill.
- * @param {number} [bill.tax] - Tax in local currency associated with the bill.
- * @param {number} [bill.tip] - Tip amount in local currency
+ * @param {number} [bill.tax] - Tax in dollars associated with the bill.
+ * @param {number} [bill.tip] - Tip amount dollars
  * @param {Object[]} bill.items - Array of items on the bill.
  * @param {string} bill.items[].description - Description of the item.
- * @param {string} bill.items[].price - Price of the item in local currency.
+ * @param {string} bill.items[].price - Price of the item in dollars.
+ * @param {Object[]} bill.debtorEmailAdresses - Array of email addresses of the bill debtors.
  *
  * @return {Promise} Resolves to the instance of the Bill from the database.
  */
@@ -38,6 +40,35 @@ const createBill = function createBill(bill) {
         .then((billRecord) => {
           // have bill, now create the items
           itemController.createItemsForBill(billRecord.dataValues.id, bill.items)
+          .then(() => {
+            // associate debtors with bill
+            if (bill.debtorEmailAddresses) {
+              return User.findAll({
+                where: {
+                  emailAddress: {
+                    $in: bill.debtorEmailAddresses
+                  }
+                },
+                attributes: ['id'],
+              })
+              .then(debtors => {
+
+                const createBillDebtors = (index) => {
+                  if (index === debtors.length) {
+                    return
+                  }
+
+                  BillDebtors.create({debtorId: debtors[index].dataValues.id, billId: billRecord.dataValues.id})
+                  .then(() => createBillDebtors(index + 1));  
+                };
+
+                createBillDebtors(0);
+              })
+              .catch((err) => {
+                reject(err);
+              });
+            }
+          })
           .then(() => {
             resolve(billRecord);
           })
@@ -114,6 +145,34 @@ const retrievePayerBills = function retrievePayerBills(payerId) {
       }],
   });
 };
+// need to edit description
+/**
+ * Retrieve all the bills a user is marked as the payer or a debtor of.
+ * @param {string} userId - The id of the user which corresponds to the userId of the bills.
+ *
+ * @return {Promise} Resolves to and array of Bill instances from the database.
+ */
+const retrieveDebtorBills = function retrieveDebtorBills(debtorId) {
+  return BillDebtors.findAll({
+    where: {
+      debtorId,
+    }
+  })
+  .then((billDebtorRecords) => {
+    return Bill.findAll({
+      where: {
+        id: {
+          $in: billDebtorRecords.map(record => record.dataValues.billId)
+        }
+      }
+    })
+  })
+};
+
+const retrieveAllUserBills = function retrieveAllUserBills(userId) {
+  // retrieve payer bills
+  // retrieve debtor bills
+};
 
 const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
   return Bill.findOne({
@@ -135,8 +194,8 @@ const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
  * @param {string} shortId - Short id of the item to be updated.
  * @param {Object} params - Key-value pairs of the parameters to update.
  * @param {String} [params.description] - Description of the bill.
- * @param {number} [params.tax] - Tax on the bill in local currency.
- * @param {number} [params.tip] - Tip on the bill in local currency.
+ * @param {number} [params.tax] - Tax on the bill in dollars.
+ * @param {number} [params.tip] - Tip on the bill in dollars.
  * @return {Promise} Resolves to the instance of the Bill from the database.
  */
 const updateBill = function updateBill(shortId, params, items) {
@@ -179,6 +238,8 @@ module.exports = {
   createBill,
   retrieveBill,
   retrievePayerBills,
+  retrieveDebtorBills,
+  retrieveAllUserBills,
   retrieveBillWithPaidItems,
   updateBill,
   deleteBill,

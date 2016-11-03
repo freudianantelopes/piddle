@@ -30,6 +30,9 @@ const createSampleUser = (userData, done) => {
     .then((userInstance) => {
       userData.generatedData.id = userInstance.id;
       done();
+    })
+    .catch(() => {
+      console.log('in the catch block');
     });
 };
 
@@ -80,6 +83,7 @@ const createSampleBill = (billData, done) => {
  */
 const emptyRecords = (done) => {
   Promise.all([
+    db.models.BillDebtors.sync({ force: true }),
     db.models.Bill.sync({ force: true }),
     db.models.Item.sync({ force: true }),
     db.models.User.sync({ force: true }),

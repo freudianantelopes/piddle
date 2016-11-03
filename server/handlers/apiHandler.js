@@ -66,8 +66,8 @@ const getBill = (request, response) => {
  * @param {writeableStream} response Response stream. See API documentation for parameters.
  */
 const getUserBills = (request, response) => {
-  const payerId = request.user.id;
-  billController.retrievePayerBills(payerId)
+  const userId = request.user.id;
+  billController.retrievePayerBills(userId)
     .then((bills) => {
       const billsJSON = bills.map(bill => bill.toJSON());
       response.status(200).json({ data: billsJSON });
