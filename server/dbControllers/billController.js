@@ -41,6 +41,35 @@ const createBill = function createBill(bill) {
           // have bill, now create the items
           itemController.createItemsForBill(billRecord.dataValues.id, bill.items)
           .then(() => {
+            // associate debtors with bill
+            if (bill.debtorEmailAddresses) {
+              return User.findAll({
+                where: {
+                  emailAddress: {
+                    $in: bill.debtorEmailAddresses
+                  }
+                },
+                attributes: ['id'],
+              })
+              .then(debtors => {
+
+                const createBillDebtors = (index) => {
+                  if (index === debtors.length) {
+                    return
+                  }
+
+                  BillDebtors.create({debtorId: debtors[index].dataValues.id, billId: billRecord.dataValues.id})
+                  .then(() => createBillDebtors(index + 1));  
+                };
+
+                createBillDebtors(0);
+              })
+              .catch((err) => {
+                reject(err);
+              });
+            }
+          })
+          .then(() => {
             resolve(billRecord);
           })
           .catch((err) => {
@@ -116,30 +145,33 @@ const retrievePayerBills = function retrievePayerBills(payerId) {
       }],
   });
 };
-
+// need to edit description
 /**
  * Retrieve all the bills a user is marked as the payer or a debtor of.
  * @param {string} userId - The id of the user which corresponds to the userId of the bills.
  *
  * @return {Promise} Resolves to and array of Bill instances from the database.
  */
-const retrieveAllUserBills = function retrieveAllUserBills(userId) {
+const retrieveDebtorBills = function retrieveDebtorBills(debtorId) {
   return BillDebtors.findAll({
     where: {
-      userId,
-    },
-    // include: [
-    //   {
-    //     model: Item,
-    //     include: [{
-    //       model: User,
-    //       as: 'debtor',
-    //       attributes: {
-    //         exclude: ['password'],
-    //       },
-    //     }],
-    //   }],
-  });
+      debtorId,
+    }
+  })
+  .then((billDebtorRecords) => {
+    return Bill.findAll({
+      where: {
+        id: {
+          $in: billDebtorRecords.map(record => record.dataValues.billId)
+        }
+      }
+    })
+  })
+};
+
+const retrieveAllUserBills = function retrieveAllUserBills(userId) {
+  // retrieve payer bills
+  // retrieve debtor bills
 };
 
 const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
@@ -206,6 +238,7 @@ module.exports = {
   createBill,
   retrieveBill,
   retrievePayerBills,
+  retrieveDebtorBills,
   retrieveAllUserBills,
   retrieveBillWithPaidItems,
   updateBill,
