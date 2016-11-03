@@ -581,6 +581,8 @@ class Bill extends React.Component {
     e.preventDefault();
 
     this.refs.textarea.select();
+
+    document.execCommand('copy');
   }
 
   /**
