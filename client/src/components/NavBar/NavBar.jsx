@@ -50,22 +50,20 @@ class NavBar extends Component {
             <NavItem eventKey={2} onSelect={this.handleLinkClick}>Pay Bill</NavItem>
           </Nav>
           <Nav pullRight>
+            {localStorage.getItem('piddleToken') 
+            ?
             <NavDropdown title="Account" id="basic-nav-dropdown">
-              {localStorage.getItem('piddleToken') 
-                ? 
-                <MenuItem>
-                  <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Profile</MenuItem>
-                  <MenuItem divider />
-                  <MenuItem eventKey={6} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
-                </MenuItem> 
-                :
-                <MenuItem>
-                  <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
-                  <MenuItem divider />
-                  <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
-                </MenuItem>
-              }
+              <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Profile</MenuItem>
+              <MenuItem divider />
+              <MenuItem eventKey={6} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
             </NavDropdown>
+            :
+            <NavDropdown title="Account" id="basic-nav-dropdown">
+              <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
+              <MenuItem divider />
+              <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
+            </NavDropdown>
+            }
           </Nav>
         </Navbar.Collapse>
       </Navbar>
