@@ -18,6 +18,7 @@ const sampleBill = {
       { description: '#8 Curry Rice', price: 6.50 },
       { description: 'Soda', price: 2.99 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com', '1234@gmail.com', 'abc@yahoo.com'],
   },
 };
 
@@ -32,6 +33,7 @@ const sampleBill2 = {
       { description: 'Veggie Bowl', price: 6.50 },
       { description: 'Chips and Guac', price: 3.79 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com', '1234@gmail.com', 'abc@yahoo.com'],
   },
 };
 
@@ -43,6 +45,13 @@ const sampleUser = {
   },
 };
 
+// const sampleDebtor = {
+//   sampleData: {
+//     emailAddress: 'debtor@gmail.com',
+//     password: 'secure',
+//     name: 'Jermaine Coumulo'
+//   },
+// };
 
 describe('Bill controller', () => {
   describe('Creating bills', () => {
@@ -64,6 +73,7 @@ describe('Bill controller', () => {
   describe('Retrieving bills', () => {
     before(done => specHelpers.emptyRecords(done));
     before(done => specHelpers.createSampleUser(sampleUser, done));
+    // before(done => specHelpers.createSampleUser(sampleDebtor, done));
     before(done => specHelpers.createSampleBill(sampleBill, done));
     before(done => specHelpers.createSampleBill(sampleBill2, done));
 
@@ -90,6 +100,17 @@ describe('Bill controller', () => {
           done();
         });
     });
+
+  //   it('should retrieve all the bills a user is a payer or debtor of', (done) => {
+  //     billController.retrieveAllUserBills(sampleDebtor.generatedData.id)
+  //       .then((bills) => {
+  //         console.log('bills: ', bills);
+  //         expect(bills).to.be.an('Array');
+  //         expect(bills.length).to.be.above(1);
+  //         expect(bills[0].get().description).to.equal(sampleBill.sampleData.description);
+  //         done();
+  //       });
+  //   });
   });
 
   describe('Deleting bills', () => {

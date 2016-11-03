@@ -26,6 +26,7 @@ const sampleBill = {
       { description: 'Cake', price: 4.00 },
       { description: 'Pie', price: 4.99 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com', 'otheruser@gmail.com'],
   },
 };
 
@@ -40,6 +41,7 @@ const sampleBill2 = {
       { description: 'Veggie Bowl', price: 6.50 },
       { description: 'Chips and Guac', price: 3.79 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com', 'otheruser@gmail.com'],
   },
 };
 
@@ -54,6 +56,7 @@ const sampleBill3 = {
       { description: 'Seasoned fries', price: 3.50 },
       { description: 'Chicken nuggerts', price: 4.79 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com', 'sample@gmail.com'],
   },
 };
 
