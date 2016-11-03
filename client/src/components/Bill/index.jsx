@@ -206,6 +206,8 @@ class Bill extends React.Component {
     };
 
     // eslint-disable-next-line no-undef
+    console.log('BILL================= ', bill)
+
     fetch(`${this.serverUrl}/api/bill/${this.props.params.id}`, {
       method: 'PUT',
       headers: jsonHeaders,
@@ -217,6 +219,7 @@ class Bill extends React.Component {
         /**
          * @todo this changes the URL but doesn't re-render the Bill in edit interactionMode
          */
+        console.log('DATA=============== ', data)
         this.props.router.push(`/bill/${data.shortId}`);
         this.setState({shortLink: data.shortId});
       })
@@ -570,6 +573,13 @@ class Bill extends React.Component {
     this.updateTip();
   }
 
+  /**
+   * Copy generated link for bill to user's clipboard.
+   * @method
+   * @name copyShortLink
+   * @param {object} event
+   */
+
   copyShortLink(e) {
     // Copy bill short link to user clipboard
     e.preventDefault();
@@ -686,12 +696,19 @@ class Bill extends React.Component {
                 </div>
               }
               {(this.state.interactionType === Symbol.for('edit')) &&
-                <Button
-                  type="submit"
-                  value="Save Changes"
-                  onClick={this.updateBill}
-                  disabled="true"
-                />
+                <div className="text-center">
+                  <Button
+                    className="btn-primary"
+                    id="create-new-bill-btn"
+                    type="submit"
+                    bsSize="lg"
+                    type="submit"
+                    value="Save Changes"
+                    onClick={this.updateBill}
+                    // disabled="true"
+                  >Save Changes
+                  </Button>
+                </div>
               }
               {(this.state.interactionType === Symbol.for('claim')) &&
                 <div>
