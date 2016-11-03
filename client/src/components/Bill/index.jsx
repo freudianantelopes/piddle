@@ -679,7 +679,6 @@ class Bill extends React.Component {
                     className="btn-primary"
                     id="create-new-bill-btn"
                     bsSize="lg"
-                    type="submit"
                     value="Create New Bill"
                     onClick={this.createBill}
                   >Create New Bill
