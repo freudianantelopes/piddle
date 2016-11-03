@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import React from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, browserHistory } from 'react-router';
 import { round } from 'mathjs';
 import { Form, Well, Button } from 'react-bootstrap';
 import './Bill.css';
@@ -86,9 +86,7 @@ class Bill extends React.Component {
        * @todo where is the proper place to redirect the user away from Bill?
        * This approach is giving a console error in local dev
        */
-      stateObj.error = {
-        message: 'Error: Not authenticated',
-      };
+      browserHistory.push('/');
     } else {
       // Set the default state here. We'll load the actual Bill data later
       // in componentDidMount if the user has requested a specific bill to
