@@ -1,6 +1,7 @@
 const Bill = require('../db').models.Bill;
 const Item = require('../db').models.Item;
 const User = require('../db').models.User;
+const BillDebtors = require('../db').models.BillDebtors;
 const userController = require('./userController');
 const itemController = require('./itemController');
 
@@ -15,11 +16,12 @@ const itemController = require('./itemController');
  * @param {Object} bill - Properties of the bill.
  * @param {string} bill.payerEmailAddress - Email address of the bill payer.
  * @param {string} [bill.description] - Description of the bill.
- * @param {number} [bill.tax] - Tax in local currency associated with the bill.
- * @param {number} [bill.tip] - Tip amount in local currency
+ * @param {number} [bill.tax] - Tax in dollars associated with the bill.
+ * @param {number} [bill.tip] - Tip amount dollars
  * @param {Object[]} bill.items - Array of items on the bill.
  * @param {string} bill.items[].description - Description of the item.
- * @param {string} bill.items[].price - Price of the item in local currency.
+ * @param {string} bill.items[].price - Price of the item in dollars.
+ * @param {Object[]} bill.debtorEmailAdresses - Array of email addresses of the bill debtors.
  *
  * @return {Promise} Resolves to the instance of the Bill from the database.
  */
@@ -115,6 +117,31 @@ const retrievePayerBills = function retrievePayerBills(payerId) {
   });
 };
 
+/**
+ * Retrieve all the bills a user is marked as the payer or a debtor of.
+ * @param {string} userId - The id of the user which corresponds to the userId of the bills.
+ *
+ * @return {Promise} Resolves to and array of Bill instances from the database.
+ */
+const retrieveAllUserBills = function retrieveAllUserBills(userId) {
+  return BillDebtors.findAll({
+    where: {
+      userId,
+    },
+    // include: [
+    //   {
+    //     model: Item,
+    //     include: [{
+    //       model: User,
+    //       as: 'debtor',
+    //       attributes: {
+    //         exclude: ['password'],
+    //       },
+    //     }],
+    //   }],
+  });
+};
+
 const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
   return Bill.findOne({
     where: {
@@ -135,8 +162,8 @@ const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
  * @param {string} shortId - Short id of the item to be updated.
  * @param {Object} params - Key-value pairs of the parameters to update.
  * @param {String} [params.description] - Description of the bill.
- * @param {number} [params.tax] - Tax on the bill in local currency.
- * @param {number} [params.tip] - Tip on the bill in local currency.
+ * @param {number} [params.tax] - Tax on the bill in dollars.
+ * @param {number} [params.tip] - Tip on the bill in dollars.
  * @return {Promise} Resolves to the instance of the Bill from the database.
  */
 const updateBill = function updateBill(shortId, params, items) {
@@ -179,6 +206,7 @@ module.exports = {
   createBill,
   retrieveBill,
   retrievePayerBills,
+  retrieveAllUserBills,
   retrieveBillWithPaidItems,
   updateBill,
   deleteBill,
