@@ -66,8 +66,8 @@ const getBill = (request, response) => {
  * @param {writeableStream} response Response stream. See API documentation for parameters.
  */
 const getUserBills = (request, response) => {
-  const payerId = request.user.id;
-  billController.retrievePayerBills(payerId)
+  const userId = request.user.id;
+  billController.retrievePayerBills(userId)
     .then((bills) => {
       const billsJSON = bills.map(bill => bill.toJSON());
       response.status(200).json({ data: billsJSON });
@@ -88,6 +88,7 @@ const updateBill = (request, response) => {
   const userId = request.user.get('id');
   const shortId = request.params.shortId;
   const updateParams = Object.assign({}, request.body);
+  const updateItems = Object.assign([], request.body.items);
   delete updateParams.id; // don't allow id to update
   delete updateParams.shortId; // don't allow shortId to update
   delete updateParams.payerId; // don't allow payerId to update
@@ -115,7 +116,7 @@ const updateBill = (request, response) => {
         },
       });
     }
-    return billController.updateBill(shortId, updateParams)
+    return billController.updateBill(shortId, updateParams, updateItems)
       .then(updatedBillRecord =>
         response.status(200).json({
           data: updatedBillRecord.toJSON(),

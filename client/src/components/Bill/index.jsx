@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import React from 'react';
-import { withRouter } from 'react-router';
+import { withRouter, browserHistory } from 'react-router';
 import { round } from 'mathjs';
 import { Form, Well, Button } from 'react-bootstrap';
 import './Bill.css';
@@ -29,6 +29,7 @@ class Bill extends React.Component {
     this.updateBill = this.updateBill.bind(this);
     this.claimBillItem = this.claimBillItem.bind(this);
     this.payForClaimedItems = this.payForClaimedItems.bind(this);
+    this.copyShortLink = this.copyShortLink.bind(this);
 
     // Bill Item
     this.changeBillItem = this.changeBillItem.bind(this);
@@ -77,6 +78,7 @@ class Bill extends React.Component {
         percent: null,
         usePercent: false,
       },
+      shortLink: null
     };
 
     if (!token) {
@@ -84,9 +86,7 @@ class Bill extends React.Component {
        * @todo where is the proper place to redirect the user away from Bill?
        * This approach is giving a console error in local dev
        */
-      stateObj.error = {
-        message: 'Error: Not authenticated',
-      };
+      browserHistory.push('/');
     } else {
       // Set the default state here. We'll load the actual Bill data later
       // in componentDidMount if the user has requested a specific bill to
@@ -216,6 +216,7 @@ class Bill extends React.Component {
          * @todo this changes the URL but doesn't re-render the Bill in edit interactionMode
          */
         this.props.router.push(`/bill/${data.shortId}`);
+        this.setState({shortLink: data.shortId});
       })
       .catch((error) => {
         /**
@@ -433,6 +434,7 @@ class Bill extends React.Component {
          * @todo this changes the URL but doesn't re-render the Bill in edit interactionMode
          */
         this.props.router.push(`/bill/${data.shortId}`);
+        this.setState({shortLink: data.shortId});
       })
       .catch((error) => {
         /**
@@ -538,10 +540,13 @@ class Bill extends React.Component {
     // tip based on a given percent.
     let tip = this.state.tip.value;
     if (this.state.tip.usePercent) {
+      console.log(this.state.items)
       const total = this.state.items.reduce((sum, billItem) => (
-        sum + billItem.price
+        sum + JSON.parse(billItem.price)
       ), 0);
       tip = total * (this.state.tip.percent / 100);
+      // round the result to two decimal places
+      tip = Math.round(tip * 100) / 100;
     }
     return tip;
   }
@@ -562,6 +567,22 @@ class Bill extends React.Component {
     this.setState({ items: previousItems });
 
     this.updateTip();
+  }
+
+  /**
+   * Copy generated link for bill to user's clipboard.
+   * @method
+   * @name copyShortLink
+   * @param {object} event
+   */
+
+  copyShortLink(e) {
+    // Copy bill short link to user clipboard
+    e.preventDefault();
+
+    this.refs.textarea.select();
+
+    document.execCommand('copy');
   }
 
   /**
@@ -636,11 +657,27 @@ class Bill extends React.Component {
               }
               {(this.state.interactionType === Symbol.for('new')) &&
                 <div className="text-center">
+                  <textarea 
+                    ref='textarea'
+                    className={this.state.shortLink ? 'show-shortlink' : 'hide-shortlink'}
+                    value={
+                      window.location.port.length > 0 ? 
+                      `${window.location.hostname}:${window.location.port}${window.location.pathname}` :
+                      `${window.location.hostname}${window.location.pathname}`
+                    }
+                  >
+                  </textarea>
+                  <a
+                    href='#'
+                    className={this.state.shortLink ? 'show-copy-link' : 'hide-copy-link'}
+                    onClick={this.copyShortLink}
+                  >
+                  Click here to copy your bill link!
+                  </a>
                   <Button
                     className="btn-primary"
                     id="create-new-bill-btn"
                     bsSize="lg"
-                    type="submit"
                     value="Create New Bill"
                     onClick={this.createBill}
                   >Create New Bill
@@ -648,12 +685,19 @@ class Bill extends React.Component {
                 </div>
               }
               {(this.state.interactionType === Symbol.for('edit')) &&
-                <Button
-                  type="submit"
-                  value="Save Changes"
-                  onClick={this.updateBill}
-                  disabled="true"
-                />
+                <div className="text-center">
+                  <Button
+                    className="btn-primary"
+                    id="create-new-bill-btn"
+                    type="submit"
+                    bsSize="lg"
+                    type="submit"
+                    value="Save Changes"
+                    onClick={this.updateBill}
+                    // disabled="true"
+                  >Save Changes
+                  </Button>
+                </div>
               }
               {(this.state.interactionType === Symbol.for('claim')) &&
                 <div>
