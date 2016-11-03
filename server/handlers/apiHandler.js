@@ -67,7 +67,7 @@ const getBill = (request, response) => {
  */
 const getUserBills = (request, response) => {
   const userId = request.user.id;
-  billController.retrieveAllUserBills(userId)
+  billController.retrievePayerBills(userId)
     .then((bills) => {
       const billsJSON = bills.map(bill => bill.toJSON());
       response.status(200).json({ data: billsJSON });
