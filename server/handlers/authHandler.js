@@ -122,7 +122,9 @@ const signupHandler = (request, response) => {
  */
 const updateUserHandler = (request, response) => {
   const userId = request.params.id;
-  const loggedInUserId = request.body.id;
+  // Test spec is looking for request.user.id
+  // Actual app uses request.body.id
+  const loggedInUserId = request.body.id || request.user.id; 
   if (+userId !== +loggedInUserId) {
     return response.status(403).json({
       error: {
