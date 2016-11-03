@@ -206,8 +206,6 @@ class Bill extends React.Component {
     };
 
     // eslint-disable-next-line no-undef
-    console.log('BILL================= ', bill)
-
     fetch(`${this.serverUrl}/api/bill/${this.props.params.id}`, {
       method: 'PUT',
       headers: jsonHeaders,
@@ -219,7 +217,6 @@ class Bill extends React.Component {
         /**
          * @todo this changes the URL but doesn't re-render the Bill in edit interactionMode
          */
-        console.log('DATA=============== ', data)
         this.props.router.push(`/bill/${data.shortId}`);
         this.setState({shortLink: data.shortId});
       })
@@ -585,14 +582,6 @@ class Bill extends React.Component {
     e.preventDefault();
 
     this.refs.textarea.select();
-
-    try {
-      const successful = document.execCommand('copy');
-      const msg = successful ? 'successful' : 'unsuccessful';
-      console.log('Copying text command was ' + msg);
-    } catch (err) {
-      console.log('Oops, unable to copy');
-    }
   }
 
   /**
