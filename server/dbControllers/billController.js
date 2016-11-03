@@ -139,9 +139,30 @@ const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
  * @param {number} [params.tip] - Tip on the bill in local currency.
  * @return {Promise} Resolves to the instance of the Bill from the database.
  */
-const updateBill = function updateBill(shortId, params) {
+const updateBill = function updateBill(shortId, params, items) {
   return Bill.findOne({ where: { shortId } })
-    .then(billRecord => billRecord.update(params));
+    .then(billRecord => {
+      items.forEach(item => {
+        if (!item.id) {
+          itemController.createItemsForBill(billRecord.id, [item]);
+        } else {
+          itemController.findItemById(item.id)
+          .then(itemRecord => {
+            itemRecord.update(item);
+          });      
+        }
+      });
+      Item.findAll({ where: {billId: billRecord.id} })
+      .then(dbItems => {
+        dbItems.forEach(dbItem => {
+          var stringifiedItems = JSON.stringify(items);
+          if (stringifiedItems.indexOf(dbItem.description) === -1) {
+            itemController.deleteItem(dbItem.id);
+          }
+        });
+      });
+      return billRecord.update(params);
+    });
 };
 
 /**

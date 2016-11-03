@@ -29,3 +29,22 @@
 .lead {
   font-size: 2em !important;
 }
+
+.hide-shortlink, .hide-copy-link {
+  display: none;
+}
+
+.show-shortlink, .show-copy-link {
+  display: block;
+}
+
+.show-shortlink, .hideshortlink {
+  height: 30px;
+  width: 100%;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  overflow: auto;
+  outline: none;
+  background:rgba(0,0,0,0);
+}
