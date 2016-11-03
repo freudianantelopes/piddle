@@ -7,7 +7,7 @@ const hashIds = new Hashids('manatee salt', 5);
 
 console.log('db path:', config.db.path);
 
-const sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
+const sequelize = new Sequelize(config.db.name, /*config.db.username*/root, ''/*config.db.password*/, {
   host: 'localhost',
   dialect: 'sqlite',
   logging: (process.env.NODE_ENV === 'test') ? false : console.log, // eslint-disable-line
@@ -108,15 +108,25 @@ table:
 */
 
 const BillDebtors = sequelize.define('bill_debtors', {
+  // userId: {
+  //   type: Sequelize.STRING,
+  // },
+  // billId: {
+  //   type: Sequelize.STRING,
+  // },
 });
 
 User.belongsToMany(Bill, {
   through: BillDebtors,
-  as: 'Debtors',
-  foreignKey: 'debtorId',
+  // as: 'Debtors',
+  // foreignKey: 'debtorId',
 });
 
-Bill.belongsToMany(User, { through: BillDebtors });
+Bill.belongsToMany(User, {
+  through: BillDebtors,
+  // as: 'Bill',
+  // foreignKey: 'billId',
+});
 
 Bill.belongsTo(User, {
   as: 'payer',
@@ -137,7 +147,7 @@ Item.belongsTo(User, {
 User.sync();
 Bill.sync();
 Item.sync();
-// BillDebtors.sync({ force: true });
+BillDebtors.sync();
 
 module.exports = {
   models: {
