@@ -94,6 +94,7 @@ describe('API Interactions', () => {
       beforeEach(done => specHelpers.createSampleBill(sampleBill, done));
       before(done => specHelpers.setSampleUserToken(sampleUser, done));
       beforeEach((done) => {
+        db.models.BillDebtors.sync({ force: true });
         db.models.Bill.sync({ force: true });
         done();
       });
