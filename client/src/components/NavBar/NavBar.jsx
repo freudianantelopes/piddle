@@ -31,7 +31,9 @@ class NavBar extends Component {
   handleLogoutClick() {
     // eslint-disable-next-line no-undef
     localStorage.removeItem('piddleToken');
-    window.setLoggedIn();
+    if(window.setLoggedIn) {
+      window.setLoggedIn()
+    }
     browserHistory.push('/');
   }
 
