@@ -88,6 +88,7 @@ const updateBill = (request, response) => {
   const userId = request.user.get('id');
   const shortId = request.params.shortId;
   const updateParams = Object.assign({}, request.body);
+  const updateItems = Object.assign([], request.body.items);
   delete updateParams.id; // don't allow id to update
   delete updateParams.shortId; // don't allow shortId to update
   delete updateParams.payerId; // don't allow payerId to update
@@ -115,7 +116,7 @@ const updateBill = (request, response) => {
         },
       });
     }
-    return billController.updateBill(shortId, updateParams)
+    return billController.updateBill(shortId, updateParams, updateItems)
       .then(updatedBillRecord =>
         response.status(200).json({
           data: updatedBillRecord.toJSON(),

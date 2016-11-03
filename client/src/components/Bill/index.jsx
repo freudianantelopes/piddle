@@ -569,19 +569,18 @@ class Bill extends React.Component {
     this.updateTip();
   }
 
+  /**
+   * Copy generated link for bill to user's clipboard.
+   * @method
+   * @name copyShortLink
+   * @param {object} event
+   */
+
   copyShortLink(e) {
     // Copy bill short link to user clipboard
     e.preventDefault();
 
     this.refs.textarea.select();
-
-    try {
-      const successful = document.execCommand('copy');
-      const msg = successful ? 'successful' : 'unsuccessful';
-      console.log('Copying text command was ' + msg);
-    } catch (err) {
-      console.log('Oops, unable to copy');
-    }
   }
 
   /**
@@ -684,12 +683,19 @@ class Bill extends React.Component {
                 </div>
               }
               {(this.state.interactionType === Symbol.for('edit')) &&
-                <Button
-                  type="submit"
-                  value="Save Changes"
-                  onClick={this.updateBill}
-                  disabled="true"
-                />
+                <div className="text-center">
+                  <Button
+                    className="btn-primary"
+                    id="create-new-bill-btn"
+                    type="submit"
+                    bsSize="lg"
+                    type="submit"
+                    value="Save Changes"
+                    onClick={this.updateBill}
+                    // disabled="true"
+                  >Save Changes
+                  </Button>
+                </div>
               }
               {(this.state.interactionType === Symbol.for('claim')) &&
                 <div>
