@@ -542,8 +542,9 @@ class Bill extends React.Component {
     // tip based on a given percent.
     let tip = this.state.tip.value;
     if (this.state.tip.usePercent) {
+      console.log(this.state.items)
       const total = this.state.items.reduce((sum, billItem) => (
-        sum + billItem.price
+        sum + JSON.parse(billItem.price)
       ), 0);
       tip = total * (this.state.tip.percent / 100);
       // round the result to two decimal places
