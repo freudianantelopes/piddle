@@ -30,6 +30,9 @@ const createSampleUser = (userData, done) => {
     .then((userInstance) => {
       userData.generatedData.id = userInstance.id;
       done();
+    })
+    .catch(() => {
+      console.log('in the catch block');
     });
 };
 
