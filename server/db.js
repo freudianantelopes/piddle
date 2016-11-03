@@ -105,6 +105,7 @@ without assigning them items. The debtors would then get notified somehow.
 
 This many-to-many relationship can be set up through the BillDebtors join
 table:
+*/
 
 const BillDebtors = sequelize.define('bill_debtors', {
 });
@@ -116,7 +117,6 @@ User.belongsToMany(Bill, {
 });
 
 Bill.belongsToMany(User, { through: BillDebtors });
-*/
 
 Bill.belongsTo(User, {
   as: 'payer',
@@ -133,17 +133,18 @@ Item.belongsTo(User, {
   foreignKey: 'debtorId',
 });
 
-
 // Create the tables specified above
 User.sync();
 Bill.sync();
 Item.sync();
+// BillDebtors.sync({ force: true });
 
 module.exports = {
   models: {
     Bill,
     Item,
     User,
+    BillDebtors,
   },
   sequelize,
 };
