@@ -140,12 +140,9 @@ const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
  * @return {Promise} Resolves to the instance of the Bill from the database.
  */
 const updateBill = function updateBill(shortId, params, items) {
-  // look in params to see if item has id
-
   return Bill.findOne({ where: { shortId } })
     .then(billRecord => {
-      billRecord.update(params);
-      items.forEach((item) => {
+      items.forEach(item => {
         if (!item.id) {
           itemController.createItemsForBill(billRecord.id, [item]);
         } else {
@@ -155,7 +152,17 @@ const updateBill = function updateBill(shortId, params, items) {
           });      
         }
       });
-    })
+      Item.findAll({ where: {billId: billRecord.id} })
+      .then(dbItems => {
+        dbItems.forEach(dbItem => {
+          var stringifiedItems = JSON.stringify(items);
+          if (stringifiedItems.indexOf(dbItem.description) === -1) {
+            itemController.deleteItem(dbItem.id);
+          }
+        });
+      });
+      return billRecord.update(params);
+    });
 };
 
 /**
