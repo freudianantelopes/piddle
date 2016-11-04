@@ -9,7 +9,7 @@ class BillToPay extends React.Component {
   render() {
     return (
       <div>
-        <a href={'/bill/' + this.props.bill.shortId}>{this.props.bill.description}</a>
+        <a href={'/bill/' + this.props.bill.shortId}>{this.props.bill.description || 'no description'}</a>
       </div>
     )
   }
