@@ -32,7 +32,6 @@ class PayABill extends React.Component {
   render() {
     return (
       <div>
-        Debts go here.
         {this.state.data.map(bill => <BillToPay bill={bill} />)}
       </div>
     );
