@@ -14,6 +14,7 @@ class NavBar extends Component {
         4: '/signup',
         5: '/profile',
         6: '/login',
+        7: '/allbills',
       },
     };
     this.handleLinkClick = this.handleLinkClick.bind(this);
@@ -50,6 +51,7 @@ class NavBar extends Component {
           <Nav>
             <NavItem eventKey={1} onSelect={this.handleLinkClick}>Make Bill</NavItem>
             <NavItem eventKey={2} onSelect={this.handleLinkClick}>Pay Bill</NavItem>
+            <NavItem eventKey={7} onSelect={this.handleLinkClick}>My Bills</NavItem>
           </Nav>
           <Nav pullRight>
             {localStorage.getItem('piddleToken') 
