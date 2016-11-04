@@ -394,7 +394,6 @@ class Bill extends React.Component {
     event.preventDefault();
 
     let debtorEmailAddresses = document.getElementById('taggedList').value.split(',').map(addr => addr.trim());
-    console.log(debtorEmailAddresses);
 
     const bill = {
       description: this.state.description,
@@ -447,6 +446,12 @@ class Bill extends React.Component {
          */
         console.error(error);
       });
+
+    fetch(`${this.serverUrl}/api/email`, {
+      method: 'POST',
+      headers: jsonHeaders,
+      body: JSON.stringify(debtorEmailAddresses)
+    });
   }
 
   /**

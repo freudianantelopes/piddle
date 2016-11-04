@@ -245,6 +245,8 @@ router.get('/bills', authHandler.ensureAuthenticated, apiHandler.getUserBills);
  */
 router.get('/debts', authHandler.ensureAuthenticated, apiHandler.getUserDebts);
 
+router.post('/email', authHandler.ensureAuthenticated, apiHandler.sendEmails);
+
 /**
  * @api {post} /api/bill Create a bill
  * @apiName CreateBill
