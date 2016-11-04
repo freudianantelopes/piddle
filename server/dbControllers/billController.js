@@ -145,10 +145,10 @@ const retrievePayerBills = function retrievePayerBills(payerId) {
       }],
   });
 };
-// need to edit description
+
 /**
- * Retrieve all the bills a user is marked as the payer or a debtor of.
- * @param {string} userId - The id of the user which corresponds to the userId of the bills.
+ * Retrieve all the bills a user is marked as the debtor of.
+ * @param {string} debtorId - The id of the user which corresponds to the debtorId of the bills.
  *
  * @return {Promise} Resolves to and array of Bill instances from the database.
  */
@@ -164,14 +164,54 @@ const retrieveDebtorBills = function retrieveDebtorBills(debtorId) {
         id: {
           $in: billDebtorRecords.map(record => record.dataValues.billId)
         }
-      }
+      },
+      include: [
+        {
+          model: Item,
+          include: [{
+            model: User,
+            as: 'debtor',
+            attributes: {
+              exclude: ['password'],
+            },
+          }],
+        }],
     })
   })
 };
 
+/**
+ * Retrieve all the bills a user is marked as the payer or a debtor of.
+ * @param {string} userId - The id of the user which corresponds to the userId of the bills.
+ *
+ * @return {Promise} Resolves to and array of Bill instances from the database.
+ */
 const retrieveAllUserBills = function retrieveAllUserBills(userId) {
-  // retrieve payer bills
-  // retrieve debtor bills
+  return retrievePayerBills(userId)
+    .then((billPayeeRecords) => {
+      return retrieveDebtorBills(userId)
+        .then((billDebtorRecords) => {
+          return Bill.findAll({
+            where: {
+              $or: [
+                {id: {$in: billDebtorRecords.map(record => record.dataValues.id)}},
+                {id: {$in: billPayeeRecords.map(record => record.dataValues.id)}},
+                ],
+            },
+            include: [
+              {
+                model: Item,
+                include: [{
+                  model: User,
+                  as: 'debtor',
+                  attributes: {
+                    exclude: ['password'],
+                  },
+                }],
+              }],
+          })
+        })
+    })
 };
 
 const retrieveBillWithPaidItems = function retrieveBillWithPaidItems(shortId) {
