@@ -1,3 +1,4 @@
+import jwtDecode from 'jwt-decode';
 const url = /^(development|test)$/.test(process.env.NODE_ENV) ? 'http://localhost:3000' : '';
 
 export default {
@@ -73,14 +74,24 @@ export default {
   putUpdate: (data, callback) => {
     // TODO: get id from webtoken
     // eslint-disable-next-line no-undef
-    fetch(`${url}/api/user/id`, {
+    const token = localStorage.getItem('piddleToken');
+    const userData = jwtDecode(token);
+    const userId = userData.id;
+    data.id = userId;
+    fetch(`${url}/auth/user/${userId}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        Authorization: `JWT ${token}`
       },
       body: JSON.stringify(data),
     })
-    .then(res => callback(res));
+    .then(res => {
+      res.json()
+        .then(body => {
+          localStorage.setItem('piddleToken', body.data.token);
+        })
+    });
   },
 };

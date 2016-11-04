@@ -122,7 +122,9 @@ const signupHandler = (request, response) => {
  */
 const updateUserHandler = (request, response) => {
   const userId = request.params.id;
-  const loggedInUserId = request.user.id;
+  // Test spec is looking for request.user.id
+  // Actual app uses request.body.id
+  const loggedInUserId = request.body.id || request.user.id; 
   if (+userId !== +loggedInUserId) {
     return response.status(403).json({
       error: {
@@ -132,10 +134,17 @@ const updateUserHandler = (request, response) => {
   }
   return userController.updateUser(userId, request.body)
     .then((userInstance) => {
+      const userData = {
+        id: userInstance.dataValues.id,
+        emailAddress: userInstance.dataValues.emailAddress,
+        name: userInstance.dataValues.name,
+        squareId: userInstance.dataValues.squareId,
+        paypalId: userInstance.dataValues.paypalId       
+      };
       response.status(200).json({
         data: {
           message: 'User successfully updated. New token included',
-          token: generateJWT(userInstance),
+          token: generateJWT(userData),
         },
       });
     })
