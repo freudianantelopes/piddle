@@ -9,7 +9,7 @@ class NavBar extends Component {
     this.state = {
       links: {
         1: '/bill',
-        2: '/bill',
+        2: '/pay',
         3: '/login',
         4: '/signup',
         5: '/profile',
@@ -31,6 +31,9 @@ class NavBar extends Component {
   handleLogoutClick() {
     // eslint-disable-next-line no-undef
     localStorage.removeItem('piddleToken');
+    if(window.setLoggedIn) {
+      window.setLoggedIn()
+    }
     browserHistory.push('/');
   }
 
@@ -49,13 +52,20 @@ class NavBar extends Component {
             <NavItem eventKey={2} onSelect={this.handleLinkClick}>Pay Bill</NavItem>
           </Nav>
           <Nav pullRight>
+            {localStorage.getItem('piddleToken') 
+            ?
             <NavDropdown title="Account" id="basic-nav-dropdown">
-              <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
-              <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
               <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Profile</MenuItem>
               <MenuItem divider />
               <MenuItem eventKey={6} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
             </NavDropdown>
+            :
+            <NavDropdown title="Account" id="basic-nav-dropdown">
+              <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
+              <MenuItem divider />
+              <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
+            </NavDropdown>
+            }
           </Nav>
         </Navbar.Collapse>
       </Navbar>

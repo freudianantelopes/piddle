@@ -26,7 +26,7 @@ const BillItem = (props) => {
       type: event.target.getAttribute('type'),
     };
     field.value = (field.type === 'number') ?
-      Number.parseFloat(event.target.value) :
+      event.target.value :
       event.target.value;
 
     props.changeBillItem(props.index, {
