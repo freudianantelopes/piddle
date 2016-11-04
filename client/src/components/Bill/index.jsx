@@ -8,6 +8,7 @@ import BillItemList from './../BillItemList';
 import DescriptionField from './../DescriptionField';
 import TaxField from './../TaxField';
 import TipField from './../TipField';
+import TagField from '../TagField';
 
 /**
  * @class Bill
@@ -392,12 +393,16 @@ class Bill extends React.Component {
   createBill(event) {
     event.preventDefault();
 
+    let debtorEmailAddresses = document.getElementById('taggedList').value.split(',').map(addr => addr.trim());
+    console.log(debtorEmailAddresses);
+
     const bill = {
       description: this.state.description,
       items: this.state.items,
       payerEmailAddress: this.state.token.decoded.emailAddress,
       tax: this.state.tax,
       tip: this.state.tip.value,
+      debtorEmailAddresses: debtorEmailAddresses,
     };
 
     /**
@@ -650,6 +655,9 @@ class Bill extends React.Component {
                 interactionType={this.state.interactionType}
                 tipValue={this.state.tip.value}
               />
+              {this.state.interactionType === Symbol.for('new') &&
+                <TagField />
+              }
               {
                 /**
                  * @todo Make into a component
