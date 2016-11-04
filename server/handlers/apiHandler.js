@@ -79,6 +79,20 @@ const getUserBills = (request, response) => {
     }));
 };
 
+const getUserDebts = (request, response) => {
+  const userId = request.user.id;
+  billController.retrieveDebtorBills(userId)
+  .then(bills => {
+    const billsJSON = bills.map(bill => bill.toJSON());
+    response.status(200).json({data: billsJSON});
+  })
+  .catch(err => response.status(500).json({
+    error: {
+      message: 'There was an error retrieving the user\'s debts. Error: ' + err
+    }
+  }));
+}
+
 /**
  * Update a bill. The logic for PUT /api/bill/:id.
  * @param {readableStream} request Request stream. See API documentation for parameters.
@@ -206,6 +220,7 @@ module.exports = {
   saveBill,
   getBill,
   getUserBills,
+  getUserDebts,
   updateBill,
   updateItem,
 };

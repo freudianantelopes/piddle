@@ -12,7 +12,7 @@ class PayABill extends React.Component {
   }
 
   componentWillMount() {
-    fetch(`${this.serverUrl}/api/bills`, {
+    fetch(`${this.serverUrl}/api/debts`, {
       method: 'GET',
       headers: {
         Authorization: `JWT ${localStorage.getItem('piddleToken')}`,
@@ -32,6 +32,7 @@ class PayABill extends React.Component {
   render() {
     return (
       <div>
+        Debts go here.
         {this.state.data.map(bill => <BillToPay bill={bill} />)}
       </div>
     );
