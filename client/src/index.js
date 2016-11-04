@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
 import PayABill from './components/PayABill';
+import AllUserBills from './components/AllUserBills';
 // import Bootstrap from 'react-bootstrap';
 
 ReactDOM.render((
@@ -20,6 +21,7 @@ ReactDOM.render((
           <Route path=":id" component={Bill} />
         </Route>
         <Route path='pay' component={PayABill} />
+        <Route path="allbills" component={AllUserBills} />
         <Route path="login" component={Login} />
         <Route path="signup" component={Signup} />
         <Route path="profile" component={Profile} />
