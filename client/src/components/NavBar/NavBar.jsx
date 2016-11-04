@@ -9,7 +9,7 @@ class NavBar extends Component {
     this.state = {
       links: {
         1: '/bill',
-        2: '/bill',
+        2: '/pay',
         3: '/login',
         4: '/signup',
         5: '/profile',

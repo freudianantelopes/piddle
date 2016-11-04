@@ -163,6 +163,8 @@ router.get('/bill/:shortId', authHandler.ensureAuthenticated, apiHandler.getBill
  */
 router.get('/bills', authHandler.ensureAuthenticated, apiHandler.getUserBills);
 
+router.get('/debts', authHandler.ensureAuthenticated, apiHandler.getUserDebts);
+
 /**
  * @api {post} /api/bill Create a bill
  * @apiName CreateBill

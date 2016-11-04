@@ -21,7 +21,7 @@ class JumbotronInstance extends Component {
     // what routes each button corresponds to
     this.buttonTextMap = {};
     this.buttonTextMap[this.splitABillButtonText] = '/bill';
-    this.buttonTextMap[this.payABillButtonText] = '/bill';
+    this.buttonTextMap[this.payABillButtonText] = '/pay';
     this.buttonTextMap[this.logInButtonText] = '/login';
     this.buttonTextMap[this.signUpButtonText] = '/signup';
 
