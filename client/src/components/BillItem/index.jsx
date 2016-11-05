@@ -75,6 +75,7 @@ const BillItem = (props) => {
             // checked={!!props.debtorId}
         <div>
           <input
+            className='claim-bill-item-checkbox'
             type="checkbox"
             value={props.id}
             checked={!!props.debtorId}

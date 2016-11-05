@@ -32,6 +32,7 @@ class AllUserBills extends React.Component {
 	render() {
 		return (
 			<div>
+				Click on a bill to edit or pay for it.
 				{this.state.data.map(bill => <BillToPay bill={bill} />)}
 			</div>
 		);
