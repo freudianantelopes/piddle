@@ -2,8 +2,8 @@ const billController = require('../dbControllers/billController');
 const itemController = require('../dbControllers/itemController');
 
 var send = require('gmail-send')({
-  user: 'samdsherman@gmail.com',               // Your GMail account used to send emails 
-  pass: 'mnzhpkwnsxqbwvct',             // Application-specific password TODO: put this somewhere it can't be abused
+  user: 'piddle.me.bills@gmail.com',               // Your GMail account used to send emails 
+  pass: 'rjyobjvnlprcquqh',             // Application-specific password TODO: put this somewhere it can't be abused
   // to:   '"User" <user@gmail.com>',      // Send back to yourself 
   from:   'Piddle.me',  // from: by default equals to user 
   // replyTo:'user@gmail.com'           // replyTo: by default undefined 
