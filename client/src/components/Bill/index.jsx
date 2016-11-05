@@ -604,6 +604,7 @@ class Bill extends React.Component {
     this.setState({ tax: 0 });
     this.setState({ tip: { percent: null, usePercent: false, value: 0 }});
     this.setState({ shortLink: null });
+    document.getElementById('taggedList').value = '';
   }
 
   /**
