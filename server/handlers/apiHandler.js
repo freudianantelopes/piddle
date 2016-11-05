@@ -231,7 +231,8 @@ const sendEmails = (request, response, next) => {
   request.body.debtorEmailAddresses.forEach(email => {
     send({
       to: email,
-      html: `<p>You have been tagged in a Piddle bill from ${request.user.dataValues.name} (${request.user.dataValues.emailAddress}).</p>
+      html: `<p>You have been tagged in a Piddle bill from ${request.user.dataValues.name || 'someone'} (${request.user.dataValues.emailAddress}).</p>
+             <p>We hope you enjoyed your delicious, delicious ${request.body.description || 'meal'}!</p>
              <a href='http://45.55.19.169:3000'>Click here to log in to piddle and view the bill!</a>`
     });
   });
