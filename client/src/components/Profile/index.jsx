@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import Request from '../../utils/requestHandler';
+import './Profile.css';
 
 class Profile extends Component {
   constructor(props) {
@@ -52,52 +53,64 @@ class Profile extends Component {
   render() {
     return (
       <div className="profilePage">
-        <h1>Welcome to your profile</h1>
-        <h3>Update any info below</h3>
-        <form id="signupForm">
-          <label htmlFor="emailAddress">Email</label>
-          <input
-            type="text"
-            className="updateInput"
-            id="emailAddress"
-            name="emailAddress"
-            onChange={event => this.handleInputChange(event)}
-            value={this.state.emailAddress}
-          />
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            className="updateInput"
-            id="name"
-            name="name"
-            onChange={event => this.handleInputChange(event)}
-            value={this.state.name}
-          />
-          <label htmlFor="password">square Id</label>
-          <input
-            type="text"
-            className="updateInput"
-            id="squareId"
-            name="squareId"
-            onChange={event => this.handleInputChange(event)}
-            value={this.state.squareId}
-          />
-          <label htmlFor="password">paypal Id</label>
-          <input
-            type="text"
-            className="updateInput"
-            id="paypalId"
-            name="paypalId"
-            onChange={event => this.handleInputChange(event)}
-            value={this.state.paypalId}
-          />
-          <input
-            type="submit"
-            className="submitUpdate"
-            id="submitUpdate"
-            value="Update"
-            onClick={event => this.submitUpdateForm(event)}
-          />
+        <div className="Profile-intro">
+          <p>Update any profile information below</p>
+        </div>
+        <form id="profileForm">
+
+          <div className="profileContainer">
+            <label className="label" htmlFor="emailAddress">Email</label>
+            <input
+              type="text"
+              className="updateInput"
+              id="emailAddress"
+              name="emailAddress"
+              onChange={event => this.handleInputChange(event)}
+              value={this.state.emailAddress}
+            />
+          </div>
+          <div className="profileContainer">
+            <label className="label" htmlFor="name">Name</label>
+            <input
+              type="text"
+              className="updateInput"
+              id="name"
+              name="name"
+              onChange={event => this.handleInputChange(event)}
+              value={this.state.name}
+            />
+          </div>
+          <div className="profileContainer">
+            <label className="label" htmlFor="password">square Id</label>
+            <input
+              type="text"
+              className="updateInput"
+              id="squareId"
+              name="squareId"
+              onChange={event => this.handleInputChange(event)}
+              value={this.state.squareId}
+            />
+          </div>  
+          <div className="profileContainer">
+            <label className="label" htmlFor="password">paypal Id</label>
+            <input
+              type="text"
+              className="updateInput"
+              id="paypalId"
+              name="paypalId"
+              onChange={event => this.handleInputChange(event)}
+              value={this.state.paypalId}
+            />
+          </div>  
+          <div className="profileButton">
+            <input
+              type="submit"
+              className="submitUpdate"
+              id="submitUpdate"
+              value="Update"
+              onClick={event => this.submitUpdateForm(event)}
+            />
+          </div>  
         </form>
       </div>
     );
