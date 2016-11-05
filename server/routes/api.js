@@ -287,7 +287,7 @@ router.get('/allbills', authHandler.ensureAuthenticated, apiHandler.getAllUserBi
  * }
  *
  */
-router.post('/bill', authHandler.ensureAuthenticated, apiHandler.saveBill);
+router.post('/bill', authHandler.ensureAuthenticated, apiHandler.sendEmails, apiHandler.saveBill);
 
 /**
  * @api {put} /api/bill/:shortId Update a bill
