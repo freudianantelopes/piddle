@@ -31,9 +31,10 @@ class PayABill extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.state.data.map(bill => <BillToPay bill={bill} />)}
-      </div>
+        <div>
+          Click a bill to go pay for it.
+          {this.state.data.map(bill => <BillToPay bill={bill} />)}
+        </div>
     );
   }
 }

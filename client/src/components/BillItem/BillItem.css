@@ -1,3 +1,6 @@
 .BillItem {
   margin-bottom: 0.5em;
 }
+.claim-bill-item-checkbox {
+  width: 20px;
+}

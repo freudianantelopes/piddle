@@ -1,4 +1,5 @@
 import React from 'react';
+import {ListGroupItem} from 'react-bootstrap';
 
 class BillToPay extends React.Component {
   
@@ -8,9 +9,9 @@ class BillToPay extends React.Component {
 
   render() {
     return (
-      <div>
-        <a href={'/bill/' + this.props.bill.shortId}>{this.props.bill.description || 'no description'}</a>
-      </div>
+      <ListGroupItem href={'/bill/' + this.props.bill.shortId}>
+       {this.props.bill.description || 'no description'}
+      </ListGroupItem>
     )
   }
 }
