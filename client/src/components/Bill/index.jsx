@@ -446,12 +446,6 @@ class Bill extends React.Component {
          */
         console.error(error);
       });
-
-    fetch(`${this.serverUrl}/api/email`, {
-      method: 'POST',
-      headers: jsonHeaders,
-      body: JSON.stringify(debtorEmailAddresses)
-    });
   }
 
   /**

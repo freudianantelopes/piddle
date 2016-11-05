@@ -245,8 +245,6 @@ router.get('/bills', authHandler.ensureAuthenticated, apiHandler.getUserBills);
  */
 router.get('/debts', authHandler.ensureAuthenticated, apiHandler.getUserDebts);
 
-router.post('/email', authHandler.ensureAuthenticated, apiHandler.sendEmails);
-
 /**
  * @api {post} /api/bill Create a bill
  * @apiName CreateBill
@@ -285,7 +283,7 @@ router.post('/email', authHandler.ensureAuthenticated, apiHandler.sendEmails);
  * }
  *
  */
-router.post('/bill', authHandler.ensureAuthenticated, apiHandler.saveBill);
+router.post('/bill', authHandler.ensureAuthenticated, apiHandler.sendEmails, apiHandler.saveBill);
 
 /**
  * @api {put} /api/bill/:shortId Update a bill

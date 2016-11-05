@@ -3,9 +3,9 @@ const itemController = require('../dbControllers/itemController');
 
 var send = require('gmail-send')({
   user: 'samdsherman@gmail.com',               // Your GMail account used to send emails 
-  pass: 'mnzhpkwnsxqbwvct',             // Application-specific password 
+  pass: 'mnzhpkwnsxqbwvct',             // Application-specific password TODO: put this somewhere it can't be abused
   // to:   '"User" <user@gmail.com>',      // Send back to yourself 
-  // from:   '"User" <user@gmail.com>'  // from: by default equals to user 
+  from:   'Piddle.me',  // from: by default equals to user 
   // replyTo:'user@gmail.com'           // replyTo: by default undefined 
   subject: 'Piddle bill',
   // text:    'test text'
@@ -227,17 +227,15 @@ const updateItem = (request, response) => {
     });
 };
 
-const sendEmails = (request, response) => {
-  console.log('user', request.user);
-  console.log('body', request.body, typeof request.body);
-
-  request.body.forEach(email => {
+const sendEmails = (request, response, next) => {
+  request.body.debtorEmailAddresses.forEach(email => {
     send({
       to: email,
       html: `<p>You have been tagged in a Piddle bill from ${request.user.dataValues.name} (${request.user.dataValues.emailAddress}).</p>
              <a href='http://45.55.19.169:3000'>Click here to log in to piddle and view the bill!</a>`
     });
   });
+  next();
 }
 
 module.exports = {
