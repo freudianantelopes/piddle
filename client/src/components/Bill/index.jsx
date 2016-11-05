@@ -547,7 +547,6 @@ class Bill extends React.Component {
     // tip based on a given percent.
     let tip = this.state.tip.value;
     if (this.state.tip.usePercent) {
-      console.log(this.state.items)
       const total = this.state.items.reduce((sum, billItem) => (
         sum + JSON.parse(billItem.price)
       ), 0);
@@ -593,7 +592,18 @@ class Bill extends React.Component {
   }
 
   renderNewBill() {
-    // console.log('this does nothing right now');
+    browserHistory.push('/bill');
+    this.clearState();
+  }
+
+  clearState() {
+    this.setState({ completeBill: false });
+    this.setState({ curDebtorDebt: 0 });
+    this.setState({ description: '' });
+    this.setState({ items: [{ description: '', price: 0, shortLink: null, tax: 0 }] });
+    this.setState({ tax: 0 });
+    this.setState({ tip: { percent: null, usePercent: false, value: 0 }});
+    this.setState({ shortLink: null });
   }
 
   /**
