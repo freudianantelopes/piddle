@@ -79,6 +79,20 @@ const getUserBills = (request, response) => {
     }));
 };
 
+const getAllUserBills = (request, response) => {
+  const userId = request.user.id;
+  billController.retrieveAllUserBills(userId)
+  .then(bills => {
+    const billsJSON = bills.map(bill => bill.toJSON());
+    response.status(200).json({data: billsJSON});
+  })
+  .catch(err => response.status(500).json({
+    error: {
+      message: 'There was an error retrieving the user\'s debts. Error: ' + err
+    }
+  }));
+}
+
 const getUserDebts = (request, response) => {
   const userId = request.user.id;
   billController.retrieveDebtorBills(userId)
@@ -220,6 +234,7 @@ module.exports = {
   saveBill,
   getBill,
   getUserBills,
+  getAllUserBills,
   getUserDebts,
   updateBill,
   updateItem,

@@ -10,10 +10,11 @@ class NavBar extends Component {
       links: {
         1: '/bill',
         2: '/pay',
-        3: '/login',
-        4: '/signup',
-        5: '/profile',
-        6: '/login',
+        3: '/allbills',
+        4: '/login',
+        5: '/signup',
+        6: '/profile',
+        7: '/login',
       },
     };
     this.handleLinkClick = this.handleLinkClick.bind(this);
@@ -50,20 +51,21 @@ class NavBar extends Component {
           <Nav>
             <NavItem eventKey={1} onSelect={this.handleLinkClick}>Make Bill</NavItem>
             <NavItem eventKey={2} onSelect={this.handleLinkClick}>Pay Bill</NavItem>
+            <NavItem eventKey={3} onSelect={this.handleLinkClick}>My Bills</NavItem>
           </Nav>
           <Nav pullRight>
             {localStorage.getItem('piddleToken') 
             ?
             <NavDropdown title="Account" id="basic-nav-dropdown">
-              <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Profile</MenuItem>
+              <MenuItem eventKey={6} onSelect={this.handleLinkClick}>Profile</MenuItem>
               <MenuItem divider />
-              <MenuItem eventKey={6} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
+              <MenuItem eventKey={7} onSelect={this.handleLogoutClick}>Log Out</MenuItem>
             </NavDropdown>
             :
             <NavDropdown title="Account" id="basic-nav-dropdown">
-              <MenuItem eventKey={3} onSelect={this.handleLinkClick}>Log In</MenuItem>
+              <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Log In</MenuItem>
               <MenuItem divider />
-              <MenuItem eventKey={4} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
+              <MenuItem eventKey={5} onSelect={this.handleLinkClick}>Sign Up</MenuItem>
             </NavDropdown>
             }
           </Nav>
