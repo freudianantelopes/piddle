@@ -31,6 +31,7 @@ class Bill extends React.Component {
     this.claimBillItem = this.claimBillItem.bind(this);
     this.payForClaimedItems = this.payForClaimedItems.bind(this);
     this.copyShortLink = this.copyShortLink.bind(this);
+    this.renderNewBill = this.renderNewBill.bind(this);
 
     // Bill Item
     this.changeBillItem = this.changeBillItem.bind(this);
@@ -425,6 +426,8 @@ class Bill extends React.Component {
       throw error;
     };
 
+    this.setState({ completeBill: true });
+
     // eslint-disable-next-line no-undef
     fetch(`${this.serverUrl}/api/bill`, {
       method: 'POST',
@@ -589,6 +592,10 @@ class Bill extends React.Component {
     document.execCommand('copy');
   }
 
+  renderNewBill() {
+    // console.log('this does nothing right now');
+  }
+
   /**
    * Render the component
    * @method
@@ -686,7 +693,7 @@ class Bill extends React.Component {
                     id="create-new-bill-btn"
                     bsSize="lg"
                     value="Create New Bill"
-                    onClick={this.createBill}
+                    onClick={this.state.completeBill ? this.renderNewBill : this.createBill}
                   >Create New Bill
                   </Button>
                 </div>
