@@ -1,6 +1,17 @@
 const billController = require('../dbControllers/billController');
 const itemController = require('../dbControllers/itemController');
 
+var send = require('gmail-send')({
+  user: 'samdsherman@gmail.com',               // Your GMail account used to send emails 
+  pass: 'mnzhpkwnsxqbwvct',             // Application-specific password TODO: put this somewhere it can't be abused
+  // to:   '"User" <user@gmail.com>',      // Send back to yourself 
+  from:   'Piddle.me',  // from: by default equals to user 
+  // replyTo:'user@gmail.com'           // replyTo: by default undefined 
+  subject: 'Piddle bill',
+  // text:    'test text'
+  // html:    '<b>html text text</b>' 
+});
+
 /**
  * The logic functions to handle requests to API endpoints.
  * @module Server: API Handler
@@ -66,8 +77,8 @@ const getBill = (request, response) => {
  * @param {writeableStream} response Response stream. See API documentation for parameters.
  */
 const getUserBills = (request, response) => {
-  const payerId = request.user.id;
-  billController.retrievePayerBills(payerId)
+  const userId = request.user.id;
+  billController.retrievePayerBills(userId)
     .then((bills) => {
       const billsJSON = bills.map(bill => bill.toJSON());
       response.status(200).json({ data: billsJSON });
@@ -79,6 +90,34 @@ const getUserBills = (request, response) => {
     }));
 };
 
+const getAllUserBills = (request, response) => {
+  const userId = request.user.id;
+  billController.retrieveAllUserBills(userId)
+  .then(bills => {
+    const billsJSON = bills.map(bill => bill.toJSON());
+    response.status(200).json({data: billsJSON});
+  })
+  .catch(err => response.status(500).json({
+    error: {
+      message: 'There was an error retrieving the user\'s debts. Error: ' + err
+    }
+  }));
+}
+
+const getUserDebts = (request, response) => {
+  const userId = request.user.id;
+  billController.retrieveDebtorBills(userId)
+  .then(bills => {
+    const billsJSON = bills.map(bill => bill.toJSON());
+    response.status(200).json({data: billsJSON});
+  })
+  .catch(err => response.status(500).json({
+    error: {
+      message: 'There was an error retrieving the user\'s debts. Error: ' + err
+    }
+  }));
+}
+
 /**
  * Update a bill. The logic for PUT /api/bill/:id.
  * @param {readableStream} request Request stream. See API documentation for parameters.
@@ -88,6 +127,7 @@ const updateBill = (request, response) => {
   const userId = request.user.get('id');
   const shortId = request.params.shortId;
   const updateParams = Object.assign({}, request.body);
+  const updateItems = Object.assign([], request.body.items);
   delete updateParams.id; // don't allow id to update
   delete updateParams.shortId; // don't allow shortId to update
   delete updateParams.payerId; // don't allow payerId to update
@@ -115,7 +155,7 @@ const updateBill = (request, response) => {
         },
       });
     }
-    return billController.updateBill(shortId, updateParams)
+    return billController.updateBill(shortId, updateParams, updateItems)
       .then(updatedBillRecord =>
         response.status(200).json({
           data: updatedBillRecord.toJSON(),
@@ -201,10 +241,25 @@ const updateItem = (request, response) => {
     });
 };
 
+const sendEmails = (request, response, next) => {
+  request.body.debtorEmailAddresses.forEach(email => {
+    send({
+      to: email,
+      html: `<p>You have been tagged in a Piddle bill from ${request.user.dataValues.name || 'someone'} (${request.user.dataValues.emailAddress}).</p>
+             <p>We hope you enjoyed your delicious, delicious ${request.body.description || 'meal'}!</p>
+             <a href='http://45.55.19.169:3000'>Click here to log in to piddle and view the bill!</a>`
+    });
+  });
+  next();
+}
+
 module.exports = {
   saveBill,
   getBill,
   getUserBills,
+  getAllUserBills,
+  getUserDebts,
   updateBill,
   updateItem,
+  sendEmails,
 };

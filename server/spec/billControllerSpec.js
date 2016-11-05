@@ -18,6 +18,7 @@ const sampleBill = {
       { description: '#8 Curry Rice', price: 6.50 },
       { description: 'Soda', price: 2.99 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com'],
   },
 };
 
@@ -32,6 +33,37 @@ const sampleBill2 = {
       { description: 'Veggie Bowl', price: 6.50 },
       { description: 'Chips and Guac', price: 3.79 },
     ],
+    debtorEmailAddresses: ['debtor@gmail.com'],
+  },
+};
+
+const sampleBill3 = {
+  sampleData: {
+    description: 'Chipogo Again',
+    tax: 1.99,
+    tip: 1,
+    payerEmailAddress: 'sample@gmail.com',
+    items: [
+      { description: 'Burrito', price: 7.99 },
+      { description: 'Veggie Bowl', price: 6.50 },
+      { description: 'Chips and Guac', price: 3.79 },
+    ],
+    debtorEmailAddresses: ['debtor@gmail.com'],
+  },
+};
+
+const sampleBill4 = {
+  sampleData: {
+    description: 'Super Burger Dinner',
+    tax: 2.99,
+    tip: null,
+    payerEmailAddress: 'debtor@gmail.com',
+    items: [
+      { description: 'Big Burger', price: 5.99 },
+      { description: 'Seasoned fries', price: 3.50 },
+      { description: 'Chicken nuggerts', price: 4.79 },
+    ],
+    debtorEmailAddresses: ['otheruser@gmail.com', 'sample@gmail.com'],
   },
 };
 
@@ -43,6 +75,21 @@ const sampleUser = {
   },
 };
 
+const sampleDebtor = {
+  sampleData: {
+    emailAddress: 'debtor@gmail.com',
+    password: 'secure',
+    name: 'Jermaine Coumulo'
+  },
+};
+
+const otherUser = {
+  sampleData: {
+    emailAddress: 'otheruser@gmail.com',
+    password: '1qaz2wsx3edc',
+    name: 'Joel Moore',
+  },
+};
 
 describe('Bill controller', () => {
   describe('Creating bills', () => {
@@ -62,10 +109,13 @@ describe('Bill controller', () => {
   });
 
   describe('Retrieving bills', () => {
-    before(done => specHelpers.emptyRecords(done));
-    before(done => specHelpers.createSampleUser(sampleUser, done));
-    before(done => specHelpers.createSampleBill(sampleBill, done));
-    before(done => specHelpers.createSampleBill(sampleBill2, done));
+    beforeEach(done => specHelpers.emptyRecords(done));
+    beforeEach(done => specHelpers.createSampleUser(sampleUser, done));
+    beforeEach(done => specHelpers.createSampleUser(sampleDebtor, done));
+    beforeEach(done => specHelpers.createSampleBill(sampleBill, done));
+    beforeEach(done => specHelpers.createSampleBill(sampleBill2, done));
+    beforeEach(done => specHelpers.createSampleBill(sampleBill3, done));
+    beforeEach(done => specHelpers.createSampleBill(sampleBill4, done));
 
     it('should retrieve a bill by shortId', (done) => {
       billController.retrieveBill(sampleBill.generatedData.shortId)
@@ -89,6 +139,26 @@ describe('Bill controller', () => {
           expect(bills[0].get().description).to.equal(sampleBill.sampleData.description);
           done();
         });
+    });
+
+    it('should retrieve all the bills a user is a debtor of', (done) => {
+      billController.retrieveDebtorBills(sampleDebtor.generatedData.id)
+        .then((bills) => {
+          expect(bills).to.be.an('Array');
+          expect(bills.length).to.be.above(2);
+          expect(bills[0].get().description).to.equal(sampleBill.sampleData.description);
+          done();
+        });
+    });
+
+    it('should retrieve all the bills a user is a payer or debtor of', (done) => {
+      billController.retrieveAllUserBills(sampleDebtor.generatedData.id)
+        .then((bills) => {
+          expect(bills).to.be.an('Array');
+          expect(bills.length).to.be.above(3);
+          expect(bills[3].get().description).to.equal(sampleBill4.sampleData.description);
+          done();
+        })
     });
   });
 

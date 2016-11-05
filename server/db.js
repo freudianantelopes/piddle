@@ -7,7 +7,7 @@ const hashIds = new Hashids('manatee salt', 5);
 
 console.log('db path:', config.db.path);
 
-const sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
+const sequelize = new Sequelize(config.db.name, /*config.db.username*/root, ''/*config.db.password*/, {
   host: 'localhost',
   dialect: 'sqlite',
   logging: (process.env.NODE_ENV === 'test') ? false : console.log, // eslint-disable-line
@@ -105,18 +105,27 @@ without assigning them items. The debtors would then get notified somehow.
 
 This many-to-many relationship can be set up through the BillDebtors join
 table:
+*/
 
 const BillDebtors = sequelize.define('bill_debtors', {
+  debtorId: {
+    type: Sequelize.INTEGER,
+    unique: false,
+  },
+  billId: {
+    type: Sequelize.INTEGER,
+    unique: false,
+  },
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  }
 });
 
-User.belongsToMany(Bill, {
-  through: BillDebtors,
-  as: 'Debtors',
-  foreignKey: 'debtorId',
-});
+BillDebtors.belongsTo(User);
+BillDebtors.belongsTo(Bill);
 
-Bill.belongsToMany(User, { through: BillDebtors });
-*/
 
 Bill.belongsTo(User, {
   as: 'payer',
@@ -133,8 +142,8 @@ Item.belongsTo(User, {
   foreignKey: 'debtorId',
 });
 
-
 // Create the tables specified above
+BillDebtors.sync();
 User.sync();
 Bill.sync();
 Item.sync();
@@ -144,6 +153,7 @@ module.exports = {
     Bill,
     Item,
     User,
+    BillDebtors,
   },
   sequelize,
 };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router';
 import Request from '../../utils/requestHandler';
+import './Login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -47,36 +48,47 @@ class Login extends Component {
     return (
       <div className="loginPage">
         <p className="Login-intro">
-          Welcome to the login page
+          Login To Your Account
         </p>
         <form id="loginForm">
-          <label htmlFor="emailAddress">email</label>
-          <input
-            type="text"
-            className="loginForm"
-            id="emailAddress"
-            name="emailAddress"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <label htmlFor="password">password</label>
-          <input
-            type="password"
-            className="loginForm"
-            id="password"
-            name="password"
-            onChange={event => this.handleInputChange(event)}
-          />
-          <input
-            type="submit"
-            className="submitLogin"
-            id="submitLogin"
-            value="Login"
-            onClick={event => this.submitLoginForm(event)}
-          />
+
+          <div className="loginContainer">
+            <label className="label" htmlFor="emailAddress">email</label>
+            <input
+              type="text"
+              className="loginForm"
+              id="emailAddress"
+              name="emailAddress"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div>
+
+          <div className="loginContainer">
+            <label className="label" htmlFor="password">password</label>
+            <input
+              type="password"
+              className="loginForm"
+              id="password"
+              name="password"
+              onChange={event => this.handleInputChange(event)}
+            />
+          </div>
+
+          <div className="loginButton">
+            <input
+              type="submit"
+              className="submitLogin"
+              id="submitLogin"
+              value="Login"
+              onClick={event => this.submitLoginForm(event)}
+            />
+          </div>
         </form>
         <div className="loginError">{this.state.error}</div>
-        <span>Need an account? </span>
-        <Link to="/signup">Sign up</Link>
+        <div className="needAnAccount">
+          <span>Need an account? </span>
+          <Link to="/signup">Sign up</Link>
+        </div>
       </div>
     );
   }
